@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydrex Login</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --primary: #0066ff;
+            --primary-dark: #0052cc;
+            --primary-light: #3385ff;
+            --accent: #00d4ff;
+            --bg-dark: #0a0a0a;
+            --bg-surface: #151515;
+            --bg-glass: rgba(21, 21, 21, 0.85);
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --text-muted: #666666;
+            --border: #333333;
+            --border-focus: #0066ff;
+            --error: #ff3366;
+            --success: #00cc66;
+            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-hard: 0 20px 60px rgba(0, 0, 0, 0.4);
+            --shadow-glow: 0 0 40px rgba(0, 102, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Professional animated background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(0, 102, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+                linear-gradient(45deg, transparent 48%, rgba(0, 102, 255, 0.02) 49%, rgba(0, 102, 255, 0.02) 51%, transparent 52%);
+            background-size: 100% 100%, 100% 100%, 80px 80px;
+            animation: backgroundShift 20s ease-in-out infinite, gridMove 25s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        @keyframes gridMove {
+            from { background-position: 0 0, 0 0, 0 0; }
+            to { background-position: 0 0, 0 0, 80px 80px; }
+        }
+
+        /* Premium login container */
+        .login-container {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem 2.8rem;
+            border-radius: 20px;
+            text-align: center;
+            width: 90%;
+            max-width: 440px;
+            position: relative;
+            box-shadow: var(--shadow-hard), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+            padding: 1px;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: exclude;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+        }
+
+        .login-container:hover::before {
+            opacity: 0.3;
+            animation: borderPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes borderPulse {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Professional typography */
+        h1 {
+            color: var(--text-primary);
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 400;
+            margin-bottom: 2.5rem;
+            opacity: 0.8;
+        }
+
+        /* Premium form styling */
+        .form-group {
+            position: relative;
+            margin-bottom: 1.8rem;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: var(--bg-surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 400;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-input:focus {
+            border-color: var(--border-focus);
+            background: rgba(21, 21, 21, 1);
+            box-shadow: 
+                0 0 0 4px rgba(0, 102, 255, 0.1),
+                0 4px 20px rgba(0, 102, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .form-input:focus + .form-label,
+        .form-group.focused .form-label {
+            color: var(--primary);
+        }
+
+        .form-input.error {
+            border-color: var(--error);
+            box-shadow: 0 0 0 4px rgba(255, 51, 102, 0.1);
+            animation: inputShake 0.4s ease-in-out;
+        }
+
+        .form-input.success {
+            border-color: var(--success);
+            box-shadow: 0 0 0 4px rgba(0, 204, 102, 0.1);
+        }
+
+        @keyframes inputShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+
+        /* Premium button */
+        .login-btn {
+            width: 100%;
+            padding: 18px 24px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1.05rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-soft);
+            margin-top: 1rem;
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow), var(--shadow-hard);
+        }
+
+        .login-btn:hover::before {
+            left: 100%;
+        }
+
+        .login-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .login-btn.loading {
+            background: linear-gradient(135deg, var(--border), var(--text-muted));
+            color: var(--bg-dark);
+            pointer-events: none;
+            animation: loadingPulse 1.5s ease-in-out infinite;
+        }
+
+        .login-btn.loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--bg-dark);
+            border-top-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes loadingPulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Professional message system */
+        .message {
+            margin-top: 1.5rem;
+            padding: 14px 18px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .message.error {
+            background: rgba(255, 51, 102, 0.1);
+            border: 1px solid rgba(255, 51, 102, 0.3);
+            color: var(--error);
+        }
+
+        .message.success {
+            background: rgba(0, 204, 102, 0.1);
+            border: 1px solid rgba(0, 204, 102, 0.3);
+            color: var(--success);
+        }
+
+        /* Professional loading screen */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease-in-out;
+        }
+
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .loader {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .loader-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 3px solid transparent;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: rotate 1.5s linear infinite;
+        }
+
+        .loader-ring:nth-child(2) {
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+            border-top-color: var(--accent);
+            animation-duration: 1.2s;
+            animation-direction: reverse;
+        }
+
+        .loader-ring:nth-child(3) {
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+            border-top-color: var(--primary-light);
+            animation-duration: 0.9s;
+        }
+
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .loading-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            animation: fade 2s ease-in-out infinite;
+        }
+
+        @keyframes fade {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 2rem 1.8rem;
+                margin: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .form-input,
+            .login-btn {
+                padding: 14px 18px;
+            }
+
+            .loader {
+                width: 150px;
+                height: 150px;
+            }
+        }
+
+        /* Subtle hover effects */
+        .login-container:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow), var(--shadow-hard);
+        }
+
+        /* Professional focus indicators */
+        .form-group.focused {
+            position: relative;
+        }
+
+        .form-group.focused::before {
+            content: '';
+            position: absolute;
+            left: -2px;
+            top: 20px;
+            bottom: -2px;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+            border-radius: 2px;
+            animation: focusGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes focusGlow {
+            0%, 100% { opacity: 0.5; box-shadow: 0 0 5px var(--primary); }
+            50% { opacity: 1; box-shadow: 0 0 15px var(--primary); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Hydrex</h1>
+        <p class="subtitle">If you need help contact Hydrex</p>
+        
+        <form id="login-form">
+            <div class="form-group">
+                <label class="form-label" for="username">Benutzername</label>
+                <input type="text" id="username" class="form-input" placeholder="Benutzername eingeben" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="password">Passwort</label>
+                <input type="password" id="password" class="form-input" placeholder="Passwort eingeben" required>
+            </div>
+            
+            <button type="submit" class="login-btn" id="login-btn">
+                Anmelden
+            </button>
+        </form>
+        
+        <div id="message" class="message"></div>
+    </div>
+
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loader">
+            <div class="loader-ring"></div>
+            <div class="loader-ring"></div>
+            <div class="loader-ring"></div>
+        </div>
+        <div class="loading-text">Website wird geladen...</div>
+        <div class="loading-subtitle">Bitte warten...</div>
+    </div>
+
+    <script>
+        const form = document.getElementById('login-form');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('login-btn');
+        const message = document.getElementById('message');
+        const loadingOverlay = document.getElementById('loading-overlay');
+
+        // Credentials
+        const correctUsername = 'Hydrex';
+        const correctPassword = '2622011';
+
+        // Enhanced form interactions
+        [usernameInput, passwordInput].forEach(input => {
+            const group = input.closest('.form-group');
+            
+            input.addEventListener('focus', () => {
+                group.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', () => {
+                group.classList.remove('focused');
+            });
+
+            input.addEventListener('input', () => {
+                input.classList.remove('error', 'success');
+                hideMessage();
+            });
+        });
+
+        function showMessage(text, type = 'error') {
+            message.textContent = text;
+            message.className = `message ${type} show`;
+            
+            setTimeout(() => hideMessage(), 5000);
+        }
+
+        function hideMessage() {
+            message.classList.remove('show');
+        }
+
+        function validateInput(input) {
+            if (input.value.trim() === '') {
+                input.classList.add('error');
+                return false;
+            }
+            input.classList.remove('error');
+            input.classList.add('success');
+            return true;
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            
+            // Validation
+            const isUsernameValid = validateInput(usernameInput);
+            const isPasswordValid = validateInput(passwordInput);
+            
+            if (!isUsernameValid || !isPasswordValid) {
+                showMessage('Bitte füllen Sie alle Felder aus.', 'error');
+                return;
+            }
+            
+            // Loading state
+            loginBtn.classList.add('loading');
+            loginBtn.textContent = 'Wird verarbeitet...';
+            
+            // Simulate authentication
+            setTimeout(() => {
+                if (username === correctUsername && password === correctPassword) {
+                    showMessage('Anmeldung erfolgreich!', 'success');
+                    
+                    setTimeout(() => {
+                        loadingOverlay.classList.add('active');
+                        
+                        setTimeout(() => {
+                            window.location.href = 'https://github.com/scripthookfive';
+                        }, 3000);
+                    }, 600);
+                    
+                } else {
+                    showMessage('Ungültige Anmeldedaten. Bitte versuchen Sie es erneut.', 'error');
+                    usernameInput.classList.add('error');
+                    passwordInput.classList.add('error');
+                    passwordInput.value = '';
+                }
+                
+                // Reset button
+                loginBtn.classList.remove('loading');
+                loginBtn.textContent = 'Anmelden';
+            }, 1200);
+        });
+
+        // Professional keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (loadingOverlay.classList.contains('active')) {
+                    loadingOverlay.classList.remove('active');
+                }
+                hideMessage();
+            }
+        });
+
+        // Smooth page entry
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '1';
+        });
+
+        // Professional parallax effect (subtle)
+        document.addEventListener('mousemove', (e) => {
+            const container = document.querySelector('.login-container');
+            const rect = container.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            const deltaX = (e.clientX - centerX) * 0.01;
+            const deltaY = (e.clientY - centerY) * 0.01;
+            
+            container.style.transform = `translateY(-2px) rotateX(${-deltaY}deg) rotateY(${deltaX}deg)`;
+        });
+
+        document.addEventListener('mouseleave', () => {
+            const container = document.querySelector('.login-container');
+            container.style.transform = '';
+        });
+    </script>
+</body>
+</html>
